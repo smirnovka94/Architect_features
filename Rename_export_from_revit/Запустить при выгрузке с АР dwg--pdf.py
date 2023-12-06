@@ -66,9 +66,9 @@ dict_name = {
             "LETV-01_PD_АР2_Лист 16_План -2 этажа. Фрагмент 7. М 1ː100": [r".*АР2-16.\w{3}", r".*Лист-План -2-го этажа. Фрагмент 7.\w{3}",],
             "LETV-01_PD_АР2_Лист 17_Экспликация помещений -2 этажа (начало)": [r".*АР2-17.\w{3}", r".*Лист-Экспликация помещений -2-го этажа (начало).\w{3}",],
             "LETV-01_PD_АР2_Лист 18_Экспликация помещений -2 этажа (окончание)": [r".*АР2-18.\w{3}", r".*Лист-Экспликация помещений -2-го этажа (окончание).\w{3}",],
-            "LETV-01_PD_АР2_Лист 19_План -1 этажа. Фрагмент 1. М1:100": [r".*АР2-19.\w{3}", r".*Лист-План -1 этажа. Фрагмент 1.\w{3}",],
-            "LETV-01_PD_АР2_Лист 20_План -1 этажа. Фрагмент 2. М1:100": [r".*АР2-20.\w{3}", r".*Лист-План -1 этажа. Фрагмент 2.\w{3}",],
-            "LETV-01_PD_АР2_Лист 21_План -1 этажа. Фрагмент 3. М1:100": [r".*АР2-21.\w{3}", r".*Лист-План -1 этажа. Фрагмент 3.\w{3}",],
+            "LETV-01_PD_АР2_Лист 19_План -1 этажа. Фрагмент 1. М 1ː100": [r".*АР2-19.\w{3}", r".*Лист-План -1 этажа. Фрагмент 1.\w{3}",],
+            "LETV-01_PD_АР2_Лист 20_План -1 этажа. Фрагмент 2. М 1ː100": [r".*АР2-20.\w{3}", r".*Лист-План -1 этажа. Фрагмент 2.\w{3}",],
+            "LETV-01_PD_АР2_Лист 21_План -1 этажа. Фрагмент 3. М 1ː100": [r".*АР2-21.\w{3}", r".*Лист-План -1 этажа. Фрагмент 3.\w{3}",],
             "LETV-01_PD_АР2_Лист 22_Экспликация помещений -1 этажа": [r".*АР2-22.\w{3}", r".*Лист-Экспликация помещений -1-го этажа.\w{3}",],
             "LETV-01_PD_АР2_Лист 23_Разрез 1-1. Разрез 2-2. М 1ː100": [r".*АР2-23.\w{3}", r".*Лист-Разрез 1-1. Разрез 2-2.\w{3}",],
 
@@ -224,19 +224,14 @@ def replace_file(full_filename_now,full_filename_new):
 def dict_right_filename(find_name):
     """Подбирает к неправильному имени правильное"""
     strip_name, file_extension = os.path.splitext(find_name)
-    print(f"on_rename {find_name}")
     if pattern_all(find_name):
         for keys, values in dict_name.items():
-
             bool_rename = re.fullmatch(values[1], find_name)
-            # print(f"on_rename [1] {bool_rename}")
             if bool_rename == None:
-                # print(f"on_rename [0] {bool_rename}")
                 bool_rename = re.fullmatch(values[0], find_name)
-
             if bool_rename:
                 right_filename = keys + file_extension
-                print(f"Переименовали фаил {find_name} --> {right_filename}")
+                # print(f"Переименовали фаил {find_name} --> {right_filename}")
                 return right_filename
 
            
@@ -251,9 +246,9 @@ def main():
     
     for file in from_DWG:
         on_rename = dict_right_filename(file)
-        full_file = os.path.join(directory_dwg, file)
+        full_file = os.path.join("DWG", file)
         if on_rename != None:
-            full_on_rename = os.path.join(directory_dwg, on_rename)
+            full_on_rename = os.path.join("DWG", on_rename)
             if on_rename in from_DWG:
                 print(f"Удален        {on_rename}")
                 os.remove(full_on_rename)
@@ -262,23 +257,18 @@ def main():
             
     for file in from_DWG:
         on_rename = dict_right_filename(file)
-        full_file = os.path.join(directory_dwg, file)
+        full_file = os.path.join("DWG", file)
         if on_rename != None:
-            print(on_rename)
-
-            full_on_rename = os.path.join(directory_dwg, on_rename)
+            full_on_rename = os.path.join("DWG", on_rename)
             print(f"Переименовали {file} --> {on_rename[:25]}...{on_rename[-30:]}")
-            print(full_file)
-            print(full_on_rename)
             os.rename(full_file, full_on_rename)
-            print(f"Переименовка True")
-            # except FileExistsError:
-            #     continue
+            # print(f"Переименовка True")
+
 
   
     for file in from_DWG:
-        full_name = os.path.join(directory_dwg, file)
-        full_name_new = os.path.join(directory_pdf, file)
+        full_name = os.path.join("DWG", file)
+        full_name_new = os.path.join("PDF", file)
         #Ищем НЕ PDF файлы, после чего запускаем удаление/перемещение
      
         if pattern_(file):
@@ -287,9 +277,10 @@ def main():
 
 
 while(True):
+    # main()
     try:
         main()
-    except OSError:
+    except Exception:
         time.sleep(10)
     time.sleep(10)
     
